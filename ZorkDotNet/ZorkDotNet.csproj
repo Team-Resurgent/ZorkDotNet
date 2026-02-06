@@ -12,6 +12,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>ZorkDotNet</RootNamespace>
     <AssemblyName>Zork</AssemblyName>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>
