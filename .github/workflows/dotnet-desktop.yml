@@ -103,18 +103,34 @@ jobs:
         with:
           name: release
 
+      # Artifact may be under release/ or at root
+      - name: Create ZorkDotNet-<target>.zip for each platform
+        run: |
+          root="."
+          [ -d release ] && root="release"
+          for dir in win-x64 win-arm64 linux-x64 linux-arm64 linux-arm osx-x64 osx-arm64; do
+            name="ZorkDotNet-${dir}.zip"
+            if [ -f "$root/$dir/Zork.exe" ]; then
+              (cd "$root/$dir" && zip -q "$name" Zork.exe)
+            else
+              (cd "$root/$dir" && zip -q "$name" zork)
+            fi
+            mv "$root/$dir/$name" .
+          done
+          ls -la ZorkDotNet-*.zip
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
           generate_release_notes: true
           files: |
-            win-x64/Zork.exe
-            win-arm64/Zork.exe
-            linux-x64/zork
-            linux-arm64/zork
-            linux-arm/zork
-            osx-x64/zork
-            osx-arm64/zork
+            ZorkDotNet-win-x64.zip
+            ZorkDotNet-win-arm64.zip
+            ZorkDotNet-linux-x64.zip
+            ZorkDotNet-linux-arm64.zip
+            ZorkDotNet-linux-arm.zip
+            ZorkDotNet-osx-x64.zip
+            ZorkDotNet-osx-arm64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
