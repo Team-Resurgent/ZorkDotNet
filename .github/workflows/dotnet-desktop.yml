@@ -27,21 +27,44 @@ jobs:
       - name: Run tests
         run: dotnet test ZorkDotNet.sln -c Release --verbosity normal
 
-      - name: Publish Windows (win-x64)
+      - name: Publish Windows (win-x64, win-arm64)
         run: |
           dotnet publish ZorkDotNet/ZorkDotNet.csproj -c Release -r win-x64 \
             --self-contained true \
             -p:PublishSingleFile=true \
             -p:PublishTrimmed=true \
             -o release/win-x64
+          dotnet publish ZorkDotNet/ZorkDotNet.csproj -c Release -r win-arm64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=true \
+            -o release/win-arm64
 
-      - name: Publish Linux (linux-x64)
+      - name: Publish Linux (linux-x64, linux-arm64, linux-arm)
         run: |
           dotnet publish ZorkDotNet/ZorkDotNet.csproj -c Release -r linux-x64 \
             --self-contained true \
             -p:PublishSingleFile=true \
             -p:PublishTrimmed=true \
             -o release/linux-x64
+          dotnet publish ZorkDotNet/ZorkDotNet.csproj -c Release -r linux-arm64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=true \
+            -o release/linux-arm64
+          dotnet publish ZorkDotNet/ZorkDotNet.csproj -c Release -r linux-arm \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=true \
+            -o release/linux-arm
+
+      - name: Publish FreeBSD (freebsd-x64)
+        run: |
+          dotnet publish ZorkDotNet/ZorkDotNet.csproj -c Release -r freebsd-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:PublishTrimmed=true \
+            -o release/freebsd-x64
 
       - name: Publish macOS (osx-x64, osx-arm64)
         run: |
@@ -56,9 +79,12 @@ jobs:
             -p:PublishTrimmed=true \
             -o release/osx-arm64
 
-      - name: Rename Mac and Linux executables to lowercase zork
+      - name: Rename Mac, Linux, and FreeBSD executables to lowercase zork
         run: |
           mv release/linux-x64/Zork release/linux-x64/zork
+          mv release/linux-arm64/Zork release/linux-arm64/zork
+          mv release/linux-arm/Zork release/linux-arm/zork
+          mv release/freebsd-x64/Zork release/freebsd-x64/zork
           mv release/osx-x64/Zork release/osx-x64/zork
           mv release/osx-arm64/Zork release/osx-arm64/zork
 
@@ -86,7 +112,11 @@ jobs:
           generate_release_notes: true
           files: |
             release/win-x64/Zork.exe
+            release/win-arm64/Zork.exe
             release/linux-x64/zork
+            release/linux-arm64/zork
+            release/linux-arm/zork
+            release/freebsd-x64/zork
             release/osx-x64/zork
             release/osx-arm64/zork
         env:
