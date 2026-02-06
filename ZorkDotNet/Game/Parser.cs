@@ -124,7 +124,7 @@ public static class Parser
                     var litCandle = candle != null && candle.LightAmount > 0;
                     if (hasBell && hasBook && litCandle)
                     {
-                        if (ghost.InRoom != null)
+                        if (ghost!.InRoom != null)
                         {
                             ghost.InRoom.Objects.Remove(ghost);
                             ghost.InRoom = null;
@@ -453,7 +453,7 @@ public static class Parser
             }
             var inInv = state.Winner.Inventory.Where(o => MatchObject(o, w)).ToList();
             IEnumerable<GameObject> inRoomList = Array.Empty<GameObject>();
-            if (lit)
+            if (lit && state.Here != null)
             {
                 var roomList = state.Here.Objects.Where(o => o.IsVisible || o.IsOpenOrTransparent)
                     .Concat(state.Here.Objects.Where(o => o.IsOpenOrTransparent || o.Open).SelectMany(o => o.Contents.Where(c => c.IsVisible))).ToList();
