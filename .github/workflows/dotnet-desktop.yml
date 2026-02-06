@@ -101,12 +101,12 @@ jobs:
         with:
           generate_release_notes: true
           files: |
-            release/win-x64/Zork.exe
-            release/win-arm64/Zork.exe
-            release/linux-x64/zork
-            release/linux-arm64/zork
-            release/linux-arm/zork
-            release/osx-x64/zork
-            release/osx-arm64/zork
+            win-x64/Zork.exe
+            win-arm64/Zork.exe
+            linux-x64/zork
+            linux-arm64/zork
+            linux-arm/zork
+            osx-x64/zork
+            osx-arm64/zork
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
