@@ -12,7 +12,7 @@
 
 <img src="Images/Cover.png" alt="Zork cover art" width="400" height="400" />
 
-A .NET port of [Zork](https://en.wikipedia.org/wiki/Zork), the classic interactive fiction game.
+A .NET port of [Zork](https://en.wikipedia.org/wiki/Zork), the classic interactive fiction game. ZorkDotNet runs on Windows, Linux, and Mac.
 
 </div>
 
