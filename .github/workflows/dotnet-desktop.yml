@@ -1,6 +1,6 @@
 # Build ZorkDotNet as single-file trimmed executables for Windows, macOS, and Linux.
 # Mac and Linux executables are named "zork"; Windows remains "Zork.exe".
-# On push to main: build, test, upload artifacts. On tag v*: also create a GitHub Release.
+# On push to main: build, test, upload artifacts. On tag v* or manual run: create a GitHub Release.
 
 name: Build and test
 
@@ -10,6 +10,12 @@ on:
     tags: ["v*"]
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (tag will be v<version>, e.g. 1.0.0 → v1.0.0)"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -87,6 +93,7 @@ jobs:
 
   release:
     needs: build
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -99,6 +106,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
           generate_release_notes: true
           files: |
             win-x64/Zork.exe
